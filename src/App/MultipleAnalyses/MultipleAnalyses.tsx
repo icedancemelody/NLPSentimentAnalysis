@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import './MultipleAnalyses.css'
-import { multipleAnalysesWithPy, multipleAnalysesWithPyReturns } from '../CalcWithPy'
+import { multipleAnalyses, multipleAnalysesReturnsElement } from '../PythonCaller'
 
 const introParagraphs = [
     '该页面利用人工智能分析[某行业]产品的评论。',
@@ -11,7 +11,7 @@ const introParagraphs = [
 ]
 
 const defaultInputData: string[] = []
-const defaultResults: multipleAnalysesWithPyReturns[] = []
+const defaultResults: multipleAnalysesReturnsElement[] = []
 
 const useSingleAnalyses = () => {
     const [results, setResults] = useState(defaultResults)
@@ -20,7 +20,7 @@ const useSingleAnalyses = () => {
     const inputFileRef = React.createRef<HTMLInputElement>()
 
 
-    const analyze = () => setResults(multipleAnalysesWithPy(inputData))
+    const analyze = () => setResults(multipleAnalyses(inputData))
 
     const inputFileOnChange = () => {
         console.log(inputFileRef.current?.files)

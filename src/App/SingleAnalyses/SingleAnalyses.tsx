@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import './SingleAnalyses.css'
-import { singleAnalysesWithPy } from '../CalcWithPy'
+import { singleAnalyses } from '../PythonCaller'
 
 const introParagraphs = [
     '该页面利用人工智能分析[某行业]产品的评论。',
@@ -18,7 +18,7 @@ const useSingleAnalyses = () => {
     const textAreaRef = React.createRef<HTMLTextAreaElement>()
 
     const analyze = () => {
-        const { theDimension, theAttitude,theTextFeatures, theReply } = singleAnalysesWithPy(textAreaRef.current?.value ?? '')
+        const { theDimension, theAttitude,theTextFeatures, theReply } = singleAnalyses(textAreaRef.current?.value ?? '')
         setDimension(theDimension)
         setAttitude(theAttitude)
         setTextFeatures(theTextFeatures)
