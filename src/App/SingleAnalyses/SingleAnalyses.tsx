@@ -1,6 +1,7 @@
 import React, { useState } from "react"
 import './SingleAnalyses.css'
-import { singleAnalyses } from '../PythonCaller'
+
+const { ipcRenderer } = window.require('electron')
 
 const introParagraphs = [
     '该页面利用人工智能分析[某行业]产品的评论。',
@@ -17,13 +18,16 @@ const useSingleAnalyses = () => {
 
     const textAreaRef = React.createRef<HTMLTextAreaElement>()
 
-    const analyze = () => {
-        const { theDimension, theAttitude,theTextFeatures, theReply } = singleAnalyses(textAreaRef.current?.value ?? '')
-        setDimension(theDimension)
-        setAttitude(theAttitude)
-        setTextFeatures(theTextFeatures)
-        setReply(theReply)
-    }
+    const analyze = () => ipcRenderer.send('singleAnalyses', textAreaRef.current?.value ?? '')
+
+    ipcRenderer.removeAllListeners('singleAnalysesCompleted')
+    ipcRenderer.on('singleAnalysesCompleted', (event: Event, dataString: string) => {
+        const data = JSON.parse(dataString)
+        setDimension(data.theDimension)
+        setAttitude(data.theAttitude)
+        setTextFeatures(data.theTextFeatures)
+        setReply(data.theReply)
+    })
 
     return {
         dimension,

@@ -23,11 +23,13 @@ function createWindow() {
     mainWindow.loadURL('http://localhost:3000')
   }
   else {
-    mainWindow.loadURL(url.format({
-      pathname: path.join(__dirname, './build/index.html'),
-      protocol: 'file:',
-      slashes: true
-    }))
+    // mainWindow.loadFile('./build/index.html')
+    mainWindow.loadURL(`file://${path.join(__dirname, './build/index.html')}`)
+    // mainWindow.loadURL(url.format({
+    //   pathname: path.join(__dirname, './build/index.html'),
+    //   protocol: 'file:',
+    //   slashes: true
+    // }))
   }
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
@@ -54,11 +56,22 @@ app.on('window-all-closed', function () {
 })
 
 const exec = require('child_process').exec
+const fs = require('fs')
 
-ipcMain.handle('singleAnalyses', (commentText) => {
-  exec('ipconfig')
+const filePath = 'py/dataToNodeJs.json'
+
+ipcMain.on('singleAnalyses', (event, arg) => {
+  exec('python py/calc.py', (error, stdout, stderr) => {
+    const data = fs.readFileSync(filePath)
+    event.sender.send('singleAnalysesCompleted', data.toString())
+  })
 })
 
-ipcMain.handle('multipleAnalyses', (commentTextArray) => {
-  exec('ipconfig')
+const filePath2 = 'py/dataToNodeJs2.json' // py 端测试代码弄好之后，使用 filePath1
+
+ipcMain.on('multipleAnalyses', (event, arg) => {
+  exec('python py/calc.py', (error, stdout, stderr) => {
+    const data = fs.readFileSync(filePath2)
+    event.sender.send('multipleAnalysesCompleted', data.toString())
+  })
 })

@@ -1,6 +1,15 @@
 import React, { useState } from 'react'
 import './MultipleAnalyses.css'
-import { multipleAnalyses, multipleAnalysesReturnsElement } from '../PythonCaller'
+
+const { ipcRenderer } = window.require('electron')
+
+interface multipleAnalysesReturnsElement {
+    commentText: string,
+    dimension: string,
+    attitude: string,
+    textFeatures: string,
+    reply: string
+}
 
 const introParagraphs = [
     '该页面利用人工智能分析[某行业]产品的评论。',
@@ -19,8 +28,13 @@ const useSingleAnalyses = () => {
 
     const inputFileRef = React.createRef<HTMLInputElement>()
 
+    const analyze = () => ipcRenderer.send('multipleAnalyses', inputData)
 
-    const analyze = () => setResults(multipleAnalyses(inputData))
+    ipcRenderer.removeAllListeners('multipleAnalysesCompleted')
+    ipcRenderer.on('multipleAnalysesCompleted', (event: Event, dataString: string) => {
+        const data = JSON.parse(dataString)
+        setResults(data.data)
+    })
 
     const inputFileOnChange = () => {
         console.log(inputFileRef.current?.files)
