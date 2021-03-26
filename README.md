@@ -4,11 +4,12 @@
 
 [TOC]
 
-## 技术栈
+## 技术栈和工具
 
 1. Node.js
 2. React
 3. Electron
+4. Inno Setup Compiler
 
 ## 开发环境配置
 
@@ -28,8 +29,79 @@
 
 ## 打包方法
 
-尚未成功打包，待补充说明。
+不使用 electron-forge，使用 Inno Setup Compiler。
+
+> Inno Setup Compiler 下载地址：https://files.jrsoftware.org/is/6/innosetup-6.1.2.exe 。使用浏览器访问该地址将直接下载。使用教程搜一搜就好了，简单的配置。
 
 1. 确保 `main.js` 中 `const dev = false`
 2. 执行 `npm run build` ：构建 react 网页版
-3. 执行 `npm run make` ：打包为安装包。若不成功，过程中应该能成功打包 package，可以以 exe 运行
+3. 执行 `npm run package` ：打包为绿色版程序，程序文件夹在 `./out`
+4. 使用 Inno Setup Compiler 打包
+
+## 面向 Python 程序的接口
+
+Python 程序放在 py 目录下，通过同目录下的 json 文件与前端传输数据。
+
+- 前端向 Python 传：`py/dataToPy.json`
+- Python 向前端传：`py/dataToNodeJs.json`
+
+注意写入和读取使用 UTF-8 编码。
+
+前端向 Python 传两种数据结构，一种对应单条分析，一种对应批量分析。数据结构如下：
+
+1. 单条分析：
+
+```json
+{
+    "comment": "评论内容"
+}
+```
+
+2. 批量分析：
+
+```json
+{
+    "data": [
+        "评论内容1",
+        "评论内容2",
+        "评论内容3",
+    ]
+}
+```
+
+Python 向前端传两种数据结构，一种对应单条分析，一种对应批量分析。数据结构如下：
+
+1. 单条分析：
+
+```json
+{
+    "theDimension": "评论角度",
+    "theAttitude": "评论态度",
+    "theTextFeatures": "文字特征",
+    "theReply": "自动回复"
+}
+```
+
+2. 多条分析：
+
+```json
+{
+    "data": [
+        {
+            "commentText": "评论内容",
+            "dimension": "评论角度",
+            "attitude": "正/负",
+            "textFeatures": "文字特征",
+            "reply": "自动回复"
+        },
+        {
+            "commentText": "评论内容",
+            "dimension": "评论角度",
+            "attitude": "正面/负面",
+            "textFeatures": "文字特征",
+            "reply": "自动回复"
+        }
+    ]
+}
+```
+

@@ -76,3 +76,9 @@ p {
   /* copy from microsoft edge */
   background: #DDDDDD;
 }
+::-webkit-scrollbar{
+  width: 12px;
+}
+::-webkit-scrollbar-thumb{
+  background-color: lightgray;
+}

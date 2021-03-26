@@ -19,7 +19,7 @@ const introParagraphs = [
     '评论态度分为两种：正面和负面'
 ]
 
-const defaultInputData: string[] = []
+const defaultInputData: string = ''
 const defaultResults: multipleAnalysesReturnsElement[] = []
 
 const useSingleAnalyses = () => {
@@ -37,16 +37,11 @@ const useSingleAnalyses = () => {
     })
 
     const inputFileOnChange = () => {
-        console.log(inputFileRef.current?.files)
         const fileReader = new FileReader()
-        fileReader.onload = (e) => {
-            if (e.target?.result) {
-                setInputData(JSON.parse(e.target?.result.toString()).data)
-                console.log(JSON.parse(e.target?.result.toString()).data)
 
-            }
-            console.log(e.target?.result)
-        }
+        fileReader.onload = (e) =>
+            e.target?.result && setInputData(e.target?.result.toString())
+
         if (inputFileRef.current?.files && inputFileRef.current?.files.length > 0) {
             fileReader.readAsText(inputFileRef.current?.files[0])
         }

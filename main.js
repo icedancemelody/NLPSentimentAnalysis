@@ -1,11 +1,11 @@
-// Modules to control application life and create native browser window
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
-const url = require("url");
 const { ipcMain } = require('electron')
 
+const devMode = false
+const openDevTools = false
+
 function createWindow() {
-  // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -16,23 +16,12 @@ function createWindow() {
     }
   })
 
-  // and load the index.html of the app.
-  // mainWindow.loadFile('index.html')
-  const dev = true
-  if (dev) {
-    mainWindow.loadURL('http://localhost:3000')
-  }
-  else {
-    // mainWindow.loadFile('./build/index.html')
-    mainWindow.loadURL(`file://${path.join(__dirname, './build/index.html')}`)
-    // mainWindow.loadURL(url.format({
-    //   pathname: path.join(__dirname, './build/index.html'),
-    //   protocol: 'file:',
-    //   slashes: true
-    // }))
-  }
-  // Open the DevTools.
-  // mainWindow.webContents.openDevTools()
+  devMode
+    ? mainWindow.loadURL('http://localhost:3000')
+    : mainWindow.loadFile(`${__dirname}/build/index.html`)
+
+  openDevTools
+    && mainWindow.webContents.openDevTools()
 }
 
 // This method will be called when Electron has finished
@@ -40,7 +29,6 @@ function createWindow() {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow()
-
   app.on('activate', function () {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
@@ -58,20 +46,23 @@ app.on('window-all-closed', function () {
 const exec = require('child_process').exec
 const fs = require('fs')
 
-const filePath = 'py/dataToNodeJs.json'
+const cmdToCallPython = `python ${__dirname}/py/calc.py`
+const filePath_dataToPy = `${__dirname}/py/dataToPy.json`
+const filePath_dataToNodeJs = `${__dirname}/py/dataToNodeJs.json`
+const filePath_dataToNodeJs2 = `${__dirname}/py/dataToNodeJs2.json` // py 端测试代码弄好之后，使用 filePath_dataToNodeJs
 
-ipcMain.on('singleAnalyses', (event, arg) => {
-  exec('python py/calc.py', (error, stdout, stderr) => {
-    const data = fs.readFileSync(filePath)
+ipcMain.on('singleAnalyses', (event, dataString) => {
+  fs.writeFileSync(filePath_dataToPy, dataString)
+  exec(cmdToCallPython, (error, stdout, stderr) => {
+    const data = fs.readFileSync(filePath_dataToNodeJs)
     event.sender.send('singleAnalysesCompleted', data.toString())
   })
 })
 
-const filePath2 = 'py/dataToNodeJs2.json' // py 端测试代码弄好之后，使用 filePath1
-
-ipcMain.on('multipleAnalyses', (event, arg) => {
-  exec('python py/calc.py', (error, stdout, stderr) => {
-    const data = fs.readFileSync(filePath2)
+ipcMain.on('multipleAnalyses', (event, dataString) => {
+  fs.writeFileSync(filePath_dataToPy, dataString)
+  exec(cmdToCallPython, (error, stdout, stderr) => {
+    const data = fs.readFileSync(filePath_dataToNodeJs2)
     event.sender.send('multipleAnalysesCompleted', data.toString())
   })
 })

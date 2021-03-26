@@ -18,7 +18,7 @@ const useSingleAnalyses = () => {
 
     const textAreaRef = React.createRef<HTMLTextAreaElement>()
 
-    const analyze = () => ipcRenderer.send('singleAnalyses', textAreaRef.current?.value ?? '')
+    const analyze = () => ipcRenderer.send('singleAnalyses', JSON.stringify({ comment: textAreaRef.current?.value ?? '' }))
 
     ipcRenderer.removeAllListeners('singleAnalysesCompleted')
     ipcRenderer.on('singleAnalysesCompleted', (event: Event, dataString: string) => {
