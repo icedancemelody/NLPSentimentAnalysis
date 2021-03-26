@@ -36,7 +36,7 @@
 1. 确保 `main.js` 中 `const devMode = false`
 2. 执行 `npm run build` ：构建 react 网页版
 3. 执行 `npm run package` ：打包为绿色版程序，程序文件夹在 `./out`
-4. 删除打包出来的程序文件夹中的 `resources/app/node_modules/.cache` 文件夹，否则无法打包安装包
+4. 删除打包出来的程序文件夹中的 `resources/app/node_modules` 文件夹，以减小安装包体积
 5. 使用 Inno Setup Compiler 打包
 
 ## 面向 Python 程序的接口
