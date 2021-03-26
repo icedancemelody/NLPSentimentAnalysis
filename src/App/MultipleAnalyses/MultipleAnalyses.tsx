@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import './MultipleAnalyses.css'
+import drawPieCharts from './drawPieCharts'
+import dp from './dataProcesser'
 
 const { ipcRenderer } = window.require('electron')
 
-interface multipleAnalysesReturnsElement {
+export interface multipleAnalysesReturnsElement {
     commentText: string,
     dimension: string,
     attitude: string,
@@ -22,11 +24,18 @@ const introParagraphs = [
 const defaultInputData: string = ''
 const defaultResults: multipleAnalysesReturnsElement[] = []
 
-const useSingleAnalyses = () => {
+const useMultipleAnalyses = () => {
     const [results, setResults] = useState(defaultResults)
     const [inputData, setInputData] = useState(defaultInputData)
 
     const inputFileRef = React.createRef<HTMLInputElement>()
+    const dimensionPieChartRef = React.createRef<HTMLDivElement>()
+    const attitudePieChartRef = React.createRef<HTMLDivElement>()
+
+    useEffect(() => {
+        drawPieCharts(dimensionPieChartRef.current, dp.getDataForDimensionPie(results))
+        drawPieCharts(attitudePieChartRef.current, dp.getDataForAttitudePie(results))
+    }, [results, dimensionPieChartRef, attitudePieChartRef])
 
     const analyze = () => ipcRenderer.send('multipleAnalyses', inputData)
 
@@ -54,6 +63,8 @@ const useSingleAnalyses = () => {
     return {
         results,
         inputFileRef,
+        dimensionPieChartRef,
+        attitudePieChartRef,
         analyze,
         inputFileOnChange
     }
@@ -63,9 +74,11 @@ export default function MultipleAnalyses() {
     const {
         results,
         inputFileRef,
+        dimensionPieChartRef,
+        attitudePieChartRef,
         analyze,
         inputFileOnChange
-    } = useSingleAnalyses()
+    } = useMultipleAnalyses()
 
     return (
         <main id="multiple-analyses" key="多条分析">
@@ -74,7 +87,7 @@ export default function MultipleAnalyses() {
                 <h1>使用说明</h1>
                 {
                     introParagraphs.map((item, index) =>
-                        <p key={index}>{item}</p>
+                        (<p key={index}>{item}</p>)
                     )
                 }
             </article>
@@ -89,15 +102,32 @@ export default function MultipleAnalyses() {
                 <h1>统计结果</h1>
                 <section>
                     <h2>各角度评论占比</h2>
-                    <p>[此处放置饼图]</p>
+                    <p style={{ display: results.length === 0 ? 'inline' : 'none' }}>
+                        {'等待导入数据'}
+                    </p>
+                    <div
+                        id="dimensionPieChart"
+                        ref={dimensionPieChartRef}
+                        style={{ height: '300px', width: '250px', display: results.length === 0 ? 'none' : 'block' }}>
+                    </div>
                 </section>
                 <section>
                     <h2>各态度评论占比</h2>
-                    <p>[此处放置饼图]</p>
+                    <p style={{ display: results.length === 0 ? 'inline' : 'none' }}>
+                        {'等待导入数据'}
+                    </p>
+                    <div
+                        id="attitudePieChart"
+                        ref={attitudePieChartRef}
+                        style={{ height: '300px', width: '250px', display: results.length === 0 ? 'none' : 'block' }}>
+                    </div>
                 </section>
             </article>
             <article className="results-area">
                 <h1>各条评论分析结果</h1>
+                <p style={{ display: results.length === 0 ? 'inline' : 'none' }}>
+                    {'等待导入数据'}
+                </p>
                 {
                     results.map((result, index) => (
                         <article className="result-item" key={index}>

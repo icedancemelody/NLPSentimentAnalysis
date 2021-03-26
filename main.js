@@ -2,8 +2,8 @@ const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const { ipcMain } = require('electron')
 
-const devMode = false
-const openDevTools = false
+const devMode = true
+const openDevTools = true
 
 function createWindow() {
   const mainWindow = new BrowserWindow({

@@ -12,12 +12,12 @@ export default function Nav({
 }: NavProps) {
     return (
         <nav>
-            <ul>
+            <ul data-selected-index={tabs.map((tab, idx) => tab.name === currentTab ? (idx + 1) : '').join('')}>
                 {
                     tabs.map(tab => (
-                        <li className={currentTab === tab.name ? 'selected' : ''}
-                            onClick={() => goToTab(tab.name)}
-                            key={tab.name}>{tab.name}</li>
+                        <li onClick={() => goToTab(tab.name)}
+                            key={tab.name}>{tab.name}
+                        </li>
                     ))
                 }
             </ul>
