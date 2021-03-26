@@ -12,7 +12,7 @@ interface multipleAnalysesReturnsElement {
 }
 
 const introParagraphs = [
-    '该页面利用人工智能分析[某行业]产品的评论。',
+    '该页面利用人工智能分析[某行业]产品的评论。需要 Python 环境。',
     '导入数据文件，点击开始分析按钮，将输出各条评论对应的评论角度、评论态度、文字特征、人工智能给出的自动回复，以及总体的统计数据。',
     '数据文件要求为 JSON 文件，格式为：{ "data" : string[] } 。',
     '评论角度分为[n]方面，分别是：string[]。',
@@ -34,6 +34,10 @@ const useSingleAnalyses = () => {
     ipcRenderer.on('multipleAnalysesCompleted', (event: Event, dataString: string) => {
         const data = JSON.parse(dataString)
         setResults(data.data)
+    })
+    ipcRenderer.removeAllListeners('multipleAnalysesError')
+    ipcRenderer.on('multipleAnalysesError', (event: Event, ErrorString: string) => {
+        alert(ErrorString)
     })
 
     const inputFileOnChange = () => {

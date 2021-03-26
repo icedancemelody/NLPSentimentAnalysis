@@ -4,7 +4,7 @@ import './SingleAnalyses.css'
 const { ipcRenderer } = window.require('electron')
 
 const introParagraphs = [
-    '该页面利用人工智能分析[某行业]产品的评论。',
+    '该页面利用人工智能分析[某行业]产品的评论。需要 Python 环境。',
     '输入评论内容，点击开始分析按钮，将输出其评论角度，评论态度以及人工智能给出的自动回复。',
     '评论角度分为[n]方面，分别是：string[]。',
     '评论态度分为两种：正面和负面'
@@ -27,6 +27,10 @@ const useSingleAnalyses = () => {
         setAttitude(data.theAttitude)
         setTextFeatures(data.theTextFeatures)
         setReply(data.theReply)
+    })
+    ipcRenderer.removeAllListeners('singleAnalysesError')
+    ipcRenderer.on('singleAnalysesError', (event: Event, ErrorString: string) => {
+        alert(ErrorString)
     })
 
     return {

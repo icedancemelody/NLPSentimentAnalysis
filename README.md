@@ -24,7 +24,7 @@
 1. 运行前端：
    - 执行 `npm run react-start` （要关掉弹出的网页，网页版是不可用的）
 2. 运行 Electron：
-   - 确保 `main.js` 中 `const dev = ture`
+   - 确保 `main.js` 中 `const devMode = ture`
    - 在另一个终端执行 `npm run electron-start`，若成功则可看到应用已经启动
 
 ## 打包方法
@@ -33,10 +33,11 @@
 
 > Inno Setup Compiler 下载地址：https://files.jrsoftware.org/is/6/innosetup-6.1.2.exe 。使用浏览器访问该地址将直接下载。使用教程搜一搜就好了，简单的配置。
 
-1. 确保 `main.js` 中 `const dev = false`
+1. 确保 `main.js` 中 `const devMode = false`
 2. 执行 `npm run build` ：构建 react 网页版
 3. 执行 `npm run package` ：打包为绿色版程序，程序文件夹在 `./out`
-4. 使用 Inno Setup Compiler 打包
+4. 删除打包出来的程序文件夹中的 `resources/app/node_modules/.cache` 文件夹，否则无法打包安装包
+5. 使用 Inno Setup Compiler 打包
 
 ## 面向 Python 程序的接口
 

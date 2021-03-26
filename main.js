@@ -55,7 +55,9 @@ ipcMain.on('singleAnalyses', (event, dataString) => {
   fs.writeFileSync(filePath_dataToPy, dataString)
   exec(cmdToCallPython, (error, stdout, stderr) => {
     const data = fs.readFileSync(filePath_dataToNodeJs)
-    event.sender.send('singleAnalysesCompleted', data.toString())
+    error
+      ? event.sender.send('singleAnalysesError', error)
+      : event.sender.send('singleAnalysesCompleted', data.toString())
   })
 })
 
@@ -63,6 +65,8 @@ ipcMain.on('multipleAnalyses', (event, dataString) => {
   fs.writeFileSync(filePath_dataToPy, dataString)
   exec(cmdToCallPython, (error, stdout, stderr) => {
     const data = fs.readFileSync(filePath_dataToNodeJs2)
-    event.sender.send('multipleAnalysesCompleted', data.toString())
+    error
+      ? event.sender.send('multipleAnalysesError', error)
+      : event.sender.send('multipleAnalysesCompleted', data.toString())
   })
 })
