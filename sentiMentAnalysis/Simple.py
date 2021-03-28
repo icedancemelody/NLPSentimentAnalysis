@@ -1,3 +1,5 @@
+import tarfile
+
 import torch
 from torchtext.legacy import data
 
@@ -13,7 +15,10 @@ LABEL = data.LabelField(dtype = torch.float)
 
 from torchtext.legacy import datasets
 
-
+# 解压
+# tar = tarfile.open('.data/imdb/aclImdb_v1.tar.gz', 'r')
+# tar.extractall('.data/imdb')  # 可设置解压地址
+# tar.close()
 
 train_data, test_data = datasets.IMDB.splits(TEXT, LABEL)
 
