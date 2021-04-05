@@ -8,6 +8,10 @@
 # testing
 /coverage
 
+# data
+/sentiment_analysis/.data
+/sentiMentAnalysis/.data
+
 # production
 /build
 /out
