@@ -6,10 +6,6 @@ sentiment_analysis/.data/imdb/
 
 /node_modules
 
-# data
-sentiment_analysis
-sentiMentAnalysis
-
 # production
 /build
 /out
