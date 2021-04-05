@@ -46,6 +46,12 @@
     align-items: center;
 }
 
+#dimensionPieChart, #attitudePieChart {
+    height: 300px;
+    width: 250px;
+    z-index: -1;
+}
+
 #multiple-analyses>.results-area {
     grid-row: 3/4;
     grid-column: 1/3;

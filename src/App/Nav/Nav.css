@@ -1,8 +1,14 @@
 nav {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+    left: 0;
     display: flex;
     padding: 12px 0;
     justify-content: center;
     align-items: center;
+    background-color: rgba(247, 247, 247, 0.6);
+    backdrop-filter: blur(20px);
 }
 
 nav>ul {
@@ -22,7 +28,7 @@ nav>ul::before {
     border-radius: 4px;
     background-color: #fff;
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2), inset 0 0 8px 0 rgba(0, 0, 0, 0.05);
-    transition: margin-left ease 150ms;
+    transition: margin-left ease 250ms;
 }
 
 nav>ul[data-selected-index="1"]::before {

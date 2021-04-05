@@ -1,4 +1,4 @@
-import { multipleAnalysesReturnsElement } from './MultipleAnalyses'
+import { multipleAnalysesReturnsElement } from './useMultipleAnalyses'
 const dataProcesser = {
     getDataForDimensionPie: (dataArray: multipleAnalysesReturnsElement[]) => {
         // 这里放置处理逻辑，下面是预设的返回数据

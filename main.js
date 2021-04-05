@@ -3,7 +3,7 @@ const path = require('path')
 const { ipcMain } = require('electron')
 
 const devMode = true
-const openDevTools = true
+const openDevTools = devMode
 
 function createWindow() {
   const mainWindow = new BrowserWindow({

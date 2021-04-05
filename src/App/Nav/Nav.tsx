@@ -1,22 +1,18 @@
 import './Nav.css'
 interface NavProps {
     tabs: { name: string, component: () => JSX.Element }[]
-    currentTab: string,
-    goToTab: (to: string) => void
+    currentTab: number,
+    goToTab: (to: number) => void
 }
 
-export default function Nav({
-    tabs,
-    currentTab,
-    goToTab
-}: NavProps) {
+export default function Nav({ tabs, currentTab, goToTab }: NavProps) {
     return (
         <nav>
-            <ul data-selected-index={tabs.map((tab, idx) => tab.name === currentTab ? (idx + 1) : '').join('')}>
+            <ul data-selected-index={currentTab + 1}>
                 {
-                    tabs.map(tab => (
-                        <li onClick={() => goToTab(tab.name)}
-                            key={tab.name}>{tab.name}
+                    tabs.map((tab, idx) => (
+                        <li onClick={() => goToTab(idx)} key={idx}>
+                            {tab.name}
                         </li>
                     ))
                 }

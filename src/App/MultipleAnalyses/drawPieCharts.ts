@@ -4,13 +4,9 @@ export default function drawPieCharts(Element: HTMLDivElement | null, data: { va
         return
     }
     const myChart = echarts.init(Element)
-    const option = {
-        tooltip: {
-            trigger: 'item'
-        },
-        legend: {
-            type: 'plain'
-        },
+    myChart.setOption({
+        tooltip: { trigger: 'item' },
+        legend: { type: 'plain' },
         series: [{
             type: 'pie',
             radius: ['20%', '50%'],
@@ -29,6 +25,5 @@ export default function drawPieCharts(Element: HTMLDivElement | null, data: { va
             },
             data
         }]
-    }
-    myChart.setOption(option)
+    })
 }
