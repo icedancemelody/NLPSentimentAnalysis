@@ -19,6 +19,7 @@ app.whenReady()
       frame: false,
       backgroundColor: '#f7f7f7',
       transparent: true,
+      maximizable: false,
       webPreferences: {
         preload: path.join(__dirname, 'preload.js'),
         nodeIntegration: true,
