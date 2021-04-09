@@ -1,8 +1,15 @@
 import './Nav.css'
+
+const { ipcRenderer } = window.require('electron')
+
 interface NavProps {
     tabs: { name: string, component: () => JSX.Element }[]
     currentTab: number,
     goToTab: (to: number) => void
+}
+
+const exitTheApp = () => {
+    ipcRenderer.send('exitTheApp')
 }
 
 export default function Nav({ tabs, currentTab, goToTab }: NavProps) {

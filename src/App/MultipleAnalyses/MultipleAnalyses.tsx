@@ -1,14 +1,6 @@
 import './MultipleAnalyses.css'
 import useMultipleAnalyses from './useMultipleAnalyses'
 
-const introParagraphs = [
-    '该页面利用人工智能分析[某行业]产品的评论。需要 Python 环境。',
-    '导入数据文件，点击开始分析按钮，将输出各条评论对应的评论角度、评论态度、文字特征、人工智能给出的自动回复，以及总体的统计数据。',
-    '数据文件要求为 JSON 文件，格式为：{ "data" : string[] } 。',
-    '评论角度分为[n]方面，分别是：string[]。',
-    '评论态度分为两种：正面和负面'
-]
-
 export default function MultipleAnalyses() {
     const {
         results,
@@ -21,11 +13,16 @@ export default function MultipleAnalyses() {
 
     return (
         <main id="multiple-analyses" key="多条分析">
-
             <article className="introduction">
                 <h1>使用说明</h1>
                 {
-                    introParagraphs.map((item, index) =>
+                    [
+                        '该页面利用人工智能分析[某行业]产品的评论。需要 Python 环境。',
+                        '导入数据文件，点击开始分析按钮，将输出各条评论对应的评论角度、评论态度、文字特征、人工智能给出的自动回复，以及总体的统计数据。',
+                        '数据文件要求为 JSON 文件，格式为：{ "data" : string[] } 。',
+                        '评论角度分为[n]方面，分别是：string[]。',
+                        '评论态度分为两种：正面和负面'
+                    ].map((item, index) =>
                         (<p key={index}>{item}</p>)
                     )
                 }
