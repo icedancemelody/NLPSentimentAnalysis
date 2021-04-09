@@ -20,13 +20,18 @@
     font-size: 14px;
 }
 
+@font-face {
+    font-family: 'Segoe MDL2';
+    src: url("./segmdl2.ttf");
+}
+
 #title-bar>.close-window-button {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100%;
     width: 40px;
-    font-family: 'Segoe MDL2 Assets';
+    font-family: 'Segoe MDL2';
     font-size: 12px;
     color: white;
     background-color: transparent;
