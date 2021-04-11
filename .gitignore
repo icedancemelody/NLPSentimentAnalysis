@@ -3,3 +3,9 @@ sentiMentAnalysis/.data/imdb/
 sentiMentAnalysis/data/
 sentiment_analysis/.data/
 sentiment_analysis/.data/imdb/
+
+/node_modules
+
+# production
+/build
+/out
