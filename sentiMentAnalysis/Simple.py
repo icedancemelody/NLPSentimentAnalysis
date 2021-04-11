@@ -3,15 +3,22 @@ import tarfile
 import torch
 from torchtext.legacy import data
 
+
+# 由于torchtext.datasets都是 dataset的子类，则自己导入需要使用到dataset
+
 SEED = 1234
 
 torch.manual_seed(SEED)
 torch.backends.cudnn.deterministic = True
 
+
+#
+
 TEXT = data.Field(tokenize = 'spacy',
                   tokenizer_language = 'en_core_web_sm')
 LABEL = data.LabelField(dtype = torch.float)
 
+print(vars(LABEL))
 
 from torchtext.legacy import datasets
 
@@ -20,10 +27,28 @@ from torchtext.legacy import datasets
 # tar.extractall('.data/imdb')  # 可设置解压地址
 # tar.close()
 
-train_data, test_data = datasets.IMDB.splits(TEXT, LABEL)
+# 此行更改。
+# train_data, test_data = datasets.IMDB.splits(TEXT, LABEL)
+
+
+train_data, test_data = datasets.IMDB.splits(TEXT, LABEL, root = "data")
+
+
+# for x in train_data:
+#     print(x)
+#
+# for y in test_data:
+#     print(y)
+
+# print(train_data)
+# print(test_data)
+
+
 
 print(f'Number of training examples: {len(train_data)}')
 print(f'Number of testing examples: {len(test_data)}')
+
+
 
 print(vars(train_data.examples[0]))
 
@@ -183,29 +208,29 @@ N_EPOCHS = 5
 
 best_valid_loss = float('inf')
 
-for epoch in range(N_EPOCHS):
-
-    start_time = time.time()
-
-    train_loss, train_acc = train(model, train_iterator, optimizer, criterion)
-    valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
-
-    end_time = time.time()
-
-    epoch_mins, epoch_secs = epoch_time(start_time, end_time)
-
-    if valid_loss < best_valid_loss:
-        best_valid_loss = valid_loss
-        torch.save(model.state_dict(), 'tut1-model.pt')
-
-    print(f'Epoch: {epoch + 1:02} | Epoch Time: {epoch_mins}m {epoch_secs}s')
-    print(f'\tTrain Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}%')
-    print(f'\t Val. Loss: {valid_loss:.3f} |  Val. Acc: {valid_acc * 100:.2f}%')
-
-
-
-model.load_state_dict(torch.load('tut1-model.pt'))
-
-test_loss, test_acc = evaluate(model, test_iterator, criterion)
-
-print(f'Test Loss: {test_loss:.3f} | Test Acc: {test_acc*100:.2f}%')
+# for epoch in range(N_EPOCHS):
+#
+#     start_time = time.time()
+#
+#     train_loss, train_acc = train(model, train_iterator, optimizer, criterion)
+#     valid_loss, valid_acc = evaluate(model, valid_iterator, criterion)
+#
+#     end_time = time.time()
+#
+#     epoch_mins, epoch_secs = epoch_time(start_time, end_time)
+#
+#     if valid_loss < best_valid_loss:
+#         best_valid_loss = valid_loss
+#         torch.save(model.state_dict(), 'tut1-model.pt')
+#
+#     print(f'Epoch: {epoch + 1:02} | Epoch Time: {epoch_mins}m {epoch_secs}s')
+#     print(f'\tTrain Loss: {train_loss:.3f} | Train Acc: {train_acc * 100:.2f}%')
+#     print(f'\t Val. Loss: {valid_loss:.3f} |  Val. Acc: {valid_acc * 100:.2f}%')
+#
+#
+#
+# model.load_state_dict(torch.load('tut1-model.pt'))
+#
+# test_loss, test_acc = evaluate(model, test_iterator, criterion)
+#
+# print(f'Test Loss: {test_loss:.3f} | Test Acc: {test_acc*100:.2f}%')
