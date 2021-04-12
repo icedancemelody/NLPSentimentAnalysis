@@ -1,14 +1,26 @@
 import json
+import os
 
-f1 = open('py/dataToPy.json', 'r', encoding="utf-8")
+devMode = 'false'
+
+# 生产模式使用下面路径
+if devMode == 'false':
+    path_dataToPy = os.getcwd() + '/resources/app/py/dataToPy.json'
+    path_dataToNodeJs = os.getcwd() + '/resources/app/py/dataToNodeJs.json'
+# 开发模式使用下面路径
+else:
+    path_dataToPy = os.getcwd() + '/py/dataToPy.json'
+    path_dataToNodeJs = os.getcwd() + '/py/dataToNodeJs.json'
+
+f1 = open(path_dataToPy, 'r', encoding="utf-8")
 data = json.loads(f1.read())
 f1.close()
 if 'comment' in data:
-    f = open('py/dataToNodeJs.json', 'w', encoding="utf-8")
+    f = open(path_dataToNodeJs, 'w', encoding="utf-8")
     f.write('{ "theDimension": "评论角度", "theAttitude": "评论态度", "theTextFeatures": "文字特征", "theReply": "自动回复" }')  
     f.close()
 elif 'data' in data:
-    f = open('py/dataToNodeJs.json', 'w', encoding="utf-8")
+    f = open(path_dataToNodeJs, 'w', encoding="utf-8")
     f.write(
         """
             {

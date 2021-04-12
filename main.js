@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu } = require('electron')
 const path = require('path')
 const { ipcMain } = require('electron')
 
-const devMode = true
+const devMode = false
 const openDevTools = false
 
 // This method will be called when Electron has finished
