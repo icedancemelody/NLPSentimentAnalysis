@@ -42,14 +42,19 @@ export default function useMultipleAnalyses() {
 
     useIpcRenderer(setResults)
 
-    const analyze = () =>
-        ipcRenderer.send('multipleAnalyses', inputData)
+    const analyze = () => {
+        inputFileRef.current?.files?.length != 0
+            && ipcRenderer.send('multipleAnalyses', inputData)
+    }
 
     const inputFileOnChange = () => {
         const fileReader = new FileReader()
-        fileReader.onload = (e) =>
-            e.target?.result && setInputData(e.target?.result.toString())
-        inputFileRef.current?.files && inputFileRef.current?.files.length > 0
+        fileReader.onload = (e) => {
+            e.target?.result
+                && setInputData(e.target?.result.toString())
+        }
+        inputFileRef.current?.files
+            && inputFileRef.current?.files.length > 0
             && fileReader.readAsText(inputFileRef.current?.files[0])
     }
 

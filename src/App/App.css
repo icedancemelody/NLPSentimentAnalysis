@@ -16,10 +16,11 @@
 
 .tab-container {
   position: absolute;
-  top: 0;
+  top: 92px;
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 70px 0 24px 0;
+  padding: 0 0 24px 0;
   overflow: auto;
+  z-index: 0;
 }

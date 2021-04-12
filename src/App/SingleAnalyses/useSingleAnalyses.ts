@@ -10,7 +10,8 @@ export default function useSingleAnalyses() {
     const textAreaRef = React.createRef<HTMLTextAreaElement>()
 
     const analyze = () => {
-        ipcRenderer.send('singleAnalyses', JSON.stringify({ comment: textAreaRef.current?.value ?? '' }))
+        textAreaRef.current?.value
+            && ipcRenderer.send('singleAnalyses', JSON.stringify({ comment: textAreaRef.current?.value }))
     }
 
     ipcRenderer.removeAllListeners('singleAnalysesCompleted')

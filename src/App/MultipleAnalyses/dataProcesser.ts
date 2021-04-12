@@ -1,21 +1,29 @@
 import { multipleAnalysesReturnsElement } from './useMultipleAnalyses'
 const dataProcesser = {
     getDataForDimensionPie: (dataArray: multipleAnalysesReturnsElement[]) => {
-        // 这里放置处理逻辑，下面是预设的返回数据
-        return [
-            { value: 1048, name: '外观' },
-            { value: 735, name: '手感' },
-            { value: 580, name: '速度' },
-            { value: 484, name: '服务' },
-            { value: 300, name: '价格' }
-        ]
+        const dimensions = dataArray.reduce((acc: string[], cur) => {
+            return acc.includes(cur.dimension) ? acc : [...acc, cur.dimension]
+        }, [])
+
+        return dimensions.map(dimension => ({
+            name: dimension,
+            value: dataArray.reduce((acc, cur) =>
+                cur.dimension === dimension ? acc + 1 : acc, 0
+            )
+        }))
     },
     getDataForAttitudePie: (dataArray: multipleAnalysesReturnsElement[]) => {
         // 这里放置处理逻辑，下面是预设的返回数据
-        return [
-            { value: 1048, name: '正面' },
-            { value: 735, name: '负面' }
-        ]
+        const attitudes = dataArray.reduce((acc: string[], cur) => {
+            return acc.includes(cur.attitude) ? acc : [...acc, cur.attitude]
+        }, [])
+
+        return attitudes.map(attitude => ({
+            name: attitude,
+            value: dataArray.reduce((acc, cur) =>
+                cur.attitude === attitude ? acc + 1 : acc, 0
+            )
+        }))
     },
 }
 export default dataProcesser

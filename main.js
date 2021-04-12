@@ -60,10 +60,9 @@ function ipcMainHandleEvents(mainWindow) {
   const exec = require('child_process').exec
   const fs = require('fs')
 
-  const cmdToCallPython = `python ${__dirname}/py/calc.py`
+  const command = `python ${__dirname}/py/calc.py`
   const filePath_dataToPy = `${__dirname}/py/dataToPy.json`
   const filePath_dataToNodeJs = `${__dirname}/py/dataToNodeJs.json`
-  const filePath_dataToNodeJs2 = `${__dirname}/py/dataToNodeJs2.json` // py 端测试代码弄好之后，使用 filePath_dataToNodeJs
 
   ipcMain.on('closeMainWindow', () => {
     mainWindow.close()
@@ -71,7 +70,7 @@ function ipcMainHandleEvents(mainWindow) {
 
   ipcMain.on('singleAnalyses', (event, dataString) => {
     fs.writeFileSync(filePath_dataToPy, dataString)
-    exec(cmdToCallPython, (error, stdout, stderr) => {
+    exec(command, (error, stdout, stderr) => {
       const data = fs.readFileSync(filePath_dataToNodeJs)
       error
         ? event.sender.send('singleAnalysesError', error)
@@ -81,8 +80,8 @@ function ipcMainHandleEvents(mainWindow) {
 
   ipcMain.on('multipleAnalyses', (event, dataString) => {
     fs.writeFileSync(filePath_dataToPy, dataString)
-    exec(cmdToCallPython, (error, stdout, stderr) => {
-      const data = fs.readFileSync(filePath_dataToNodeJs2)
+    exec(command, (error, stdout, stderr) => {
+      const data = fs.readFileSync(filePath_dataToNodeJs)
       error
         ? event.sender.send('multipleAnalysesError', error)
         : event.sender.send('multipleAnalysesCompleted', data.toString())

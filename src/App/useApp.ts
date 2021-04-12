@@ -15,7 +15,7 @@ const tabs = [
 
 const getEventsHandle = ({ setCurrentTab }: { setCurrentTab: React.Dispatch<React.SetStateAction<number>> }) => {
     return {
-        goToTab: (tab: number) => setCurrentTab(tab)
+        goToTab: (tabIndex: number) => setCurrentTab(tabIndex)
     }
 }
 

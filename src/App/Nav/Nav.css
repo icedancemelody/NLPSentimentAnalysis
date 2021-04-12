@@ -7,8 +7,7 @@ nav {
     display: flex;
     justify-content: center;
     padding: 12px 0;
-    background-color: rgba(247, 247, 247, 0.6);
-    backdrop-filter: blur(20px);
+    background-color: #f7f7f7;
     user-select: none;
 }
 
