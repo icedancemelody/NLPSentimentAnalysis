@@ -1,6 +1,8 @@
 import os
 
+import gensim
 import numpy as np
+import tensorflow as tf
 from gensim.models.word2vec import Word2Vec
 from gensim.corpora.dictionary import Dictionary
 from gensim import models
@@ -49,8 +51,8 @@ print(data)
 senlist1 = pd.read_excel("data/merge.xlsx",usecols = [1])
 labellist1 = pd.read_excel("data/merge.xlsx",usecols = [3])
 
-print(len(senlist1))
-print(labellist1)
+# print(len(senlist1))
+# print(labellist1)
 
 for i in range(len(senlist1)):
     # print(senlist1.iloc[i].get("cmt_cnt"))
@@ -65,7 +67,6 @@ print(sentences)
 print(labels)
 
 # 上面是数据读入
-
 
 def train_word2vec(sentences,save_path):
     sentences_seg = []
@@ -88,21 +89,29 @@ def train_word2vec(sentences,save_path):
     # model = Word2Vec(w2v_model_name)
     return model
 
-model =  train_word2vec(sentences,'word2vec.model')
+def load_model(word_model):
+    # model = Word2Vec(vector_size=100,  # 词向量维度
+    #                  min_count=5,  # 词频阈值
+    #                  window=5)  # 窗口大小
+    model = gensim.models.word2vec.Word2Vec.load(word_model)
+    return model
 
 
+#model =  train_word2vec(sentences,'word2vec.model')
+
+model = load_model("word2vec.model")
 
 def generate_id2wec(word_model):
     gensim_dict = Dictionary()
     # gensim_dict.doc2bow(model.wv.vocab.keys(), allow_update=True)
     gensim_dict.doc2bow(model.wv.index_to_key, allow_update=True)
     w2id = {v: k + 1 for k, v in gensim_dict.items()}  # 词语的索引，从1开始编号
-    print(w2id.keys())
+    # print(w2id.keys())
     # for word in w2id.keys():
     #     print(model.predict_output_word(word))
     #print()
     w2vec = {word: model.wv[word] for word in w2id.keys()}  # 词语的词向量
-    print(w2vec)
+    # print(w2vec)
     n_vocabs = len(w2id) + 1
     embedding_weights = np.zeros((n_vocabs, 100))
     for w, index in w2id.items():  # 从索引为1的词语开始，用词向量填充矩阵
@@ -123,6 +132,8 @@ def prepare_data(w2id,sentences,labels,max_len=200):
     X_train = pad_sequences(X_train, maxlen=max_len)
     X_val = pad_sequences(X_val, maxlen=max_len)
     return np.array(X_train), np_utils.to_categorical(y_train) ,np.array(X_val), np_utils.to_categorical(y_val)
+
+
 
 # 获取词向量矩阵
 w2id,embedding_weights = generate_id2wec(model)
@@ -173,15 +184,22 @@ class Sentiment:
         res = model.predict(sen_input)[0]
         return np.argmax(res)
 
-# 实例化
-senti = Sentiment(w2id,embedding_weights,100,200,3)
+    def load_model(self,modelPath):
+        self.model.load_weights(modelPath)
 
-# 模型训练
-senti.train(x_train,y_trian, x_val ,y_val,1)
+# # 实例化
+# senti = Sentiment(w2id,embedding_weights,100,200,3)
+#
+# # 模型训练
+# senti.train(x_train,y_trian, x_val ,y_val,1)
+
+senti = Sentiment(w2id,embedding_weights,100,200,3)
+senti.load_model("sentiment.h5")
 
 
 # 模型预测
-label_dic = {0:"消极的",1:"中性的",2:"积极的"}
-sen_new = "现如今的公司能够做成这样已经很不错了，微订点单网站的信息更新很及时，内容来源很真实"
-pre = senti.predict("./sentiment.h5",sen_new)
-print("'{}'的情感是:\n{}".format(sen_new,label_dic.get(pre)))
+label_dic = {0:"消极的",1:"积极的",2:"中性的"}
+while(1):
+    sen_new = input("来个评论兄弟:")
+    pre = senti.predict("./sentiment.h5", sen_new)
+    print("'{}'的情感是:\n{}".format(sen_new, label_dic.get(pre)))
