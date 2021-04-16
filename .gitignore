@@ -1,6 +1,6 @@
 sentiMentAnalysis/.data/imdb/aclImdb/
 sentiMentAnalysis/.data/imdb/
-sentiMentAnalysis/data/
+sentiMentAnalysis/data/imdb/
 sentiment_analysis/.data/
 sentiment_analysis/.data/imdb/
 

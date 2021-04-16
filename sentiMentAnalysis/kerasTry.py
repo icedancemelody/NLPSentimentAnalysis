@@ -16,6 +16,7 @@ from sklearn.model_selection import train_test_split
 from keras.utils import np_utils
 
 
+
 sentences = []
 labels = []
 w2v_model_name = os.path.join('word2vec.model')
