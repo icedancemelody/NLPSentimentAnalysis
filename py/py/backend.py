@@ -1,5 +1,19 @@
+import os
+
+import gensim
+import numpy as np
+import tensorflow as tf
+from gensim.models.word2vec import Word2Vec
+from gensim.corpora.dictionary import Dictionary
+from gensim import models
+import pandas as pd
+import jieba
+import logging
 from keras import Sequential
+from keras.preprocessing.sequence import pad_sequences
 from keras.layers import Bidirectional,LSTM,Dense,Embedding,Dropout,Activation,Softmax
+from sklearn.model_selection import train_test_split
+from keras.utils import np_utils
 
 # 封装模型和方法
 class Sentiment:

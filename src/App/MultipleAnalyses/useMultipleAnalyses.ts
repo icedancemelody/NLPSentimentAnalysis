@@ -43,7 +43,7 @@ export default function useMultipleAnalyses() {
     useIpcRenderer(setResults)
 
     const analyze = () => {
-        inputFileRef.current?.files?.length != 0
+        inputFileRef.current?.files?.length !== 0
             && ipcRenderer.send('multipleAnalyses', inputData)
     }
 

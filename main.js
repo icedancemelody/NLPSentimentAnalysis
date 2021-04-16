@@ -2,7 +2,7 @@ const { app, BrowserWindow, Menu } = require('electron')
 const path = require('path')
 const { ipcMain } = require('electron')
 
-const devMode = false
+const devMode = true
 const openDevTools = false
 
 // This method will be called when Electron has finished
@@ -60,9 +60,10 @@ function ipcMainHandleEvents(mainWindow) {
   const exec = require('child_process').exec
   const fs = require('fs')
 
-  const command = `python ${__dirname}/py/calc.py`
-  const filePath_dataToPy = `${__dirname}/py/dataToPy.json`
-  const filePath_dataToNodeJs = `${__dirname}/py/dataToNodeJs.json`
+  const pyDir = `${__dirname}/py`
+  const command = `python ${pyDir}/calc.py`
+  const filePath_dataToPy = `${pyDir}/dataToPy.json`
+  const filePath_dataToNodeJs = `${pyDir}/dataToNodeJs.json`
 
   ipcMain.on('closeMainWindow', () => {
     mainWindow.close()
@@ -70,7 +71,7 @@ function ipcMainHandleEvents(mainWindow) {
 
   ipcMain.on('singleAnalyses', (event, dataString) => {
     fs.writeFileSync(filePath_dataToPy, dataString)
-    exec(command, (error, stdout, stderr) => {
+    exec(command, { cwd: pyDir }, (error, stdout, stderr) => {
       const data = fs.readFileSync(filePath_dataToNodeJs)
       error
         ? event.sender.send('singleAnalysesError', error)
@@ -80,7 +81,7 @@ function ipcMainHandleEvents(mainWindow) {
 
   ipcMain.on('multipleAnalyses', (event, dataString) => {
     fs.writeFileSync(filePath_dataToPy, dataString)
-    exec(command, (error, stdout, stderr) => {
+    exec(command, { cwd: pyDir }, (error, stdout, stderr) => {
       const data = fs.readFileSync(filePath_dataToNodeJs)
       error
         ? event.sender.send('multipleAnalysesError', error)
