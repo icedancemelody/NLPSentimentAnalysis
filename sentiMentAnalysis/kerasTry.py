@@ -8,6 +8,7 @@ from gensim.corpora.dictionary import Dictionary
 from gensim import models
 import pandas as pd
 import jieba
+import jieba.posseg as pseg #词性标注
 import logging
 from keras import Sequential
 from keras.preprocessing.sequence import pad_sequences
@@ -17,8 +18,9 @@ from keras.utils import np_utils
 
 
 
-sentences = []
-labels = []
+sentences = [] #评论
+labels = []   # 态度
+angels = []   # 角度
 w2v_model_name = os.path.join('word2vec.model')
 
 
@@ -49,11 +51,16 @@ print(data)
 # 一些操作数据方法
 # http://baijiahao.baidu.com/s?id=1655579196096844394&wfr=spider&for=pc
 
-senlist1 = pd.read_excel("data/merge.xlsx",usecols = [1])
-labellist1 = pd.read_excel("data/merge.xlsx",usecols = [3])
+senlist1 = pd.read_excel("data/merge.xlsx",usecols = [1])   # 评论具体
+labellist1 = pd.read_excel("data/merge.xlsx",usecols = [3]) # 态度标签
+angellist = pd.read_excel("data/merge.xlsx",usecols = [4]) # 角度标签
 
-# print(len(senlist1))
-# print(labellist1)
+
+
+
+print(senlist1)
+print(labellist1)
+print(angellist)
 
 for i in range(len(senlist1)):
     # print(senlist1.iloc[i].get("cmt_cnt"))
@@ -63,20 +70,87 @@ for j in range(len(labellist1)):
     # print(labellist1.iloc[j].get("type"))
     labels.append(labellist1.iloc[j].get("type"))
 
+# 统计角度标签的所有种类：
+def sumAngels():
 
-print(sentences)
-print(labels)
+    for i in range(len(angellist)):
+
+        # if len(angels) == 4:
+        #     break
+        tempAngel = angellist.iloc[i].get("label")
+        tempAngel = str(tempAngel)
+        # 遍历标签集
+        tempAngels = tempAngel.split(",")
+        for angel in tempAngels:
+            if angel == 'nan':
+                break
+            count = 0
+            if len(angels) == 0:
+                angels.append(angel)
+                continue
+            for j in angels:
+                if angel.strip() != j.strip():
+                    count+=1
+            # print(count)
+            # print(angels)
+            if count == len(angels):
+                angels.append(angel)
+
+
+    print(angels)
+
+# 这一步得到了所有出现的评论角度，操作的结果对象为angels数组
+sumAngels()
+
+# print(sentences)
+# print(labels)
 
 # 上面是数据读入
+
+# 构建角度标签和词语的词典
+# words为评论分词结果，angels为所有角度标签集合
+
+def create_wordDic(resLb, angels):
+    # 在这里实现词典构建
+    wonb = 1
+
+
 
 def train_word2vec(sentences,save_path):
     sentences_seg = []
     sen_str = "\n".join(sentences)
+    # 分词
     res = jieba.lcut(sen_str)
+
+    # 词性标注
+    resLb = pseg.cut(sen_str)
+    # 如果想知道某个词的词性，只需要 word.flag就可以,至于每个flag是什么意思，可以看这里
+    # https://blog.csdn.net/huludan/article/details/52727298  ——jieba分词词性标注含义
+    # for word in resLb:
+    #     print(word.flag)
+    # 那么有了词语和词性，以及标签，就可以构造词典了，在这里调用自写函数create_wordDic(),传入resLb和angels
+    # create_wordDic(resLb, angels)
+
+    print(res)
     seg_str = " ".join(res)
     sen_list = seg_str.split("\n")
+
+    print(sen_list) #sen_list是一个句子数组，句子已经被拆成了词语
+
     for i in sen_list:
         sentences_seg.append(i.split())
+
+    print(sentences_seg) #所有句子的集合，每一个元素是词语的集合.其实就是分词结果
+    input()
+
+    with open("data/words.txt", "w", encoding="utf-8") as f:
+        # for word in w2id.keys():
+        for sen in sentences_seg:
+            print(sen,file = f)
+            print()
+    f.close()
+    # print(sentences_seg)  # 分词结果
+
     print("开始训练词向量")
 #     logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 
@@ -98,15 +172,24 @@ def load_model(word_model):
     return model
 
 
-#model =  train_word2vec(sentences,'word2vec.model')
+model =  train_word2vec(sentences,'word2vec.model')
 
-model = load_model("word2vec.model")
+# model = load_model("word2vec.model")
+
 
 def generate_id2wec(word_model):
     gensim_dict = Dictionary()
     # gensim_dict.doc2bow(model.wv.vocab.keys(), allow_update=True)
     gensim_dict.doc2bow(model.wv.index_to_key, allow_update=True)
     w2id = {v: k + 1 for k, v in gensim_dict.items()}  # 词语的索引，从1开始编号
+
+    # create_wordDic的调用位置
+
+    with open("data/keys.txt","w",encoding= "utf-8") as f:
+        for word in w2id.keys():
+            print(word,file = f)
+            print()
+    f.close()
     # print(w2id.keys())
     # for word in w2id.keys():
     #     print(model.predict_output_word(word))
@@ -194,8 +277,8 @@ class Sentiment:
 # # 模型训练
 # senti.train(x_train,y_trian, x_val ,y_val,1)
 
-senti = Sentiment(w2id,embedding_weights,100,200,3)
-senti.load_model("sentiment.h5")
+# senti = Sentiment(w2id,embedding_weights,100,200,3)
+# senti.load_model("sentiment.h5")
 
 
 # 模型预测
