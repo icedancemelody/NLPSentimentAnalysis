@@ -16,7 +16,7 @@ const useIpcRenderer = (setResults: React.Dispatch<React.SetStateAction<multiple
     ipcRenderer.removeAllListeners('multipleAnalysesCompleted')
     ipcRenderer.on('multipleAnalysesCompleted', (event: Event, dataString: string) => {
         const data = JSON.parse(dataString)
-        setResults(data.data)
+        setResults(data)
     })
     ipcRenderer.removeAllListeners('multipleAnalysesError')
     ipcRenderer.on('multipleAnalysesError', (event: Event, ErrorString: string) => {

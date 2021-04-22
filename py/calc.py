@@ -1,11 +1,8 @@
-from py.backend import Sentiment
-from py.backend import *
 import json
 import os
-
-# 生产/模式使用不同路径
-path_dataToPy = 'dataToPy.json'
-path_dataToNodeJs = 'dataToNodeJs.json'
+import time
+from py.backend import Sentiment
+from py.backend import *
 
 # 需要的函数
 
@@ -54,35 +51,81 @@ def prepare_data(w2id, sentences, labels, max_len=200):
     return np.array(X_train), np_utils.to_categorical(y_train), np.array(X_val), np_utils.to_categorical(y_val)
 
 
-# 获取词向量矩阵
-model = load_model("py/word2vec.model")
-w2id, embedding_weights = generate_id2wec(model)
+# # 读取输入，输入字符串放在 data 里
+# f_input = open(path_dataToPy, 'r', encoding="utf-8")
+# data = json.loads(f_input.read())
+# f_input.close()
 
-# 导入模型
-senti = Sentiment(w2id, embedding_weights, 100, 200, 3)
-senti.load_model("py/sentiment.h5")
+# if 'comment' in data:  # 单条分析，评论通过 data.comment 获得
+#     label_dic = {0: "消极的", 1: "积极的", 2: "中性的"}
+#     inputComment = data["comment"]
+#     pre = senti.predict("py/sentiment.h5", inputComment)
+#     theAttitude = label_dic.get(pre)
+#     output_dic = {
+#         "theDimension": "评论角度",
+#         "theAttitude": theAttitude,
+#         "theTextFeatures": "文字特征",
+#         "theReply": "自动回复"
+#     }
+#     output = json.dumps(output_dic)
+# elif 'data' in data:  # 批量分析，评论数组通过 data 获得
+#     # 应用模型，输出放在 output
+#     # ...
+    # output = """{"data": [
+    #     {"commentText": "item","dimension": "外观","attitude": "负","textFeatures": "文字特征","reply": "自动回复"},
+    #     {"commentText": "item","dimension": "性能","attitude": "正","textFeatures": "文字特征","reply": "自动回复"},
+    #     {"commentText": "item","dimension": "外观","attitude": "负","textFeatures": "文字特征","reply": "自动回复"},
+    #     {"commentText": "item","dimension": "性能","attitude": "正","textFeatures": "文字特征","reply": "自动回复"},
+    #     {"commentText": "item","dimension": "手感","attitude": "负","textFeatures": "文字特征","reply": "自动回复"},
+    #     {"commentText": "item","dimension": "性能","attitude": "正","textFeatures": "文字特征","reply": "自动回复"},
+    #     {"commentText": "item","dimension": "外观","attitude": "正","textFeatures": "文字特征","reply": "自动回复"},
+    #     {"commentText": "item","dimension": "性能","attitude": "正","textFeatures": "文字特征","reply": "自动回复"},
+    #     {"commentText": "item","dimension": "外观","attitude": "正","textFeatures": "文字特征","reply": "自动回复"},
+    #     {"commentText": "item","dimension": "性能","attitude": "正","textFeatures": "文字特征","reply": "自动回复"}
+    # ]}"""
 
-# 读取输入，输入字符串放在 data 里
-f_input = open(path_dataToPy, 'r', encoding="utf-8")
-data = json.loads(f_input.read())
-f_input.close()
+# # 输出到文件
+# f_output = open(path_dataToNodeJs, 'w', encoding="utf-8")
+# f_output.write(output)
+# f_output.close()
 
-if 'comment' in data:  # 单条分析，评论通过 data.comment 获得
+
+# 单条分析
+
+
+def singleAnalyses(data, senti):
+    # 预测结果映射表
     label_dic = {0: "消极的", 1: "积极的", 2: "中性的"}
-    inputComment = data["comment"]
-    pre = senti.predict("py/sentiment.h5", inputComment)
+    # 评论
+    comment = data[0]
+    # 预测
+    pre = senti.predict("py/sentiment.h5", comment)
+    # 态度
     theAttitude = label_dic.get(pre)
+    # 构造输出对象
     output_dic = {
-        "theDimension": "评论角度",
-        "theAttitude": theAttitude,
-        "theTextFeatures": "文字特征",
-        "theReply": "自动回复"
+        "status": 'new',
+        "type": 'single',
+        "data": [
+            {
+                "commentText": "评论内容",
+                "dimension": "评论角度",
+                "attitude": theAttitude,
+                "textFeatures": "文字特征",
+                "reply": "自动回复"
+            }
+        ]
     }
-    output = json.dumps(output_dic)
-elif 'data' in data:  # 批量分析，评论数组通过 data 获得
-    # 应用模型，输出放在 output
-    # ...
-    output = """{"data": [
+    # 输出对象 => json 字符串
+    outputString = json.dumps(output_dic)
+    return outputString
+
+# 批量分析
+
+
+def multipleAnalyses(data, senti):
+    # 构造输出对象
+    output_dic = json.loads("""{"data": [
         {"commentText": "item","dimension": "外观","attitude": "负","textFeatures": "文字特征","reply": "自动回复"},
         {"commentText": "item","dimension": "性能","attitude": "正","textFeatures": "文字特征","reply": "自动回复"},
         {"commentText": "item","dimension": "外观","attitude": "负","textFeatures": "文字特征","reply": "自动回复"},
@@ -93,9 +136,62 @@ elif 'data' in data:  # 批量分析，评论数组通过 data 获得
         {"commentText": "item","dimension": "性能","attitude": "正","textFeatures": "文字特征","reply": "自动回复"},
         {"commentText": "item","dimension": "外观","attitude": "正","textFeatures": "文字特征","reply": "自动回复"},
         {"commentText": "item","dimension": "性能","attitude": "正","textFeatures": "文字特征","reply": "自动回复"}
-    ]}"""
+    ]}""")
+    output_dic['status'] = 'new'
+    output_dic['type'] = 'multiple'
+    # 输出对象 => json 字符串
+    outputString = json.dumps(output_dic)
+    return outputString
 
-# 输出到文件
-f_output = open(path_dataToNodeJs, 'w', encoding="utf-8")
-f_output.write(output)
-f_output.close()
+# 写文件
+
+
+def writeFile(path, content):
+    f_output = open(path, 'w', encoding="utf-8")
+    f_output.write(content)
+    f_output.close()
+
+# 检查文件
+
+
+def checkFile(senti):
+    # 读取输入，输入字符串放在 data 里
+    f_input = open(path_dataToPy, 'r', encoding="utf-8")
+    dataString = f_input.read()
+    f_input.close()
+    # 忽略 json 转换错误
+    try:
+        data = json.loads(dataString)
+    except:
+        return
+    # 若是新信息
+    if data['status'] == 'new':
+        # 修改来源文件为 old
+        data['status'] = 'old'
+        writeFile(path_dataToPy, json.dumps(data))
+        # 若是单条分析, 计算并输出到文件
+        if data['type'] == 'single':
+            outputString = singleAnalyses(data['data'], senti)
+            writeFile(path_dataToNodeJs, outputString)
+        # 若是批量分析, 计算并输出到文件
+        elif data['type'] == 'multiple':
+            outputString = multipleAnalyses(data['data'], senti)
+            writeFile(path_dataToNodeJs, outputString)
+
+
+# 路径设置
+path_dataToPy = 'dataToPy.json'
+path_dataToNodeJs = 'dataToNodeJs.json'
+
+# 获取词向量矩阵
+model = load_model("py/word2vec.model")
+w2id, embedding_weights = generate_id2wec(model)
+
+# 导入模型
+senti = Sentiment(w2id, embedding_weights, 100, 200, 3)
+senti.load_model("py/sentiment.h5")
+
+# 轮询文件
+while True:
+    checkFile(senti)
+    time.sleep(0.1)

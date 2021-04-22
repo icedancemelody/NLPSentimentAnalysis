@@ -43,27 +43,21 @@
 
 ## 面向 Python 程序的接口
 
-Python 程序放在 py 目录下，通过同目录下的 json 文件与前端传输数据。
+Python 程序放在 py 目录下，通过同目录下的 json 文件与 JavaScript传输数据。
 
-- 前端向 Python 传：`py/dataToPy.json`
-- Python 向前端传：`py/dataToNodeJs.json`
+- JavaScript 向 Python 传：`py/dataToPy.json`
+- Python 向 JavaScript 传：`py/dataToNodeJs.json`
 
 注意写入和读取使用 UTF-8 编码。
 
-前端向 Python 传两种数据结构，一种对应单条分析，一种对应批量分析。数据结构如下：
+数据结构如下所示：
 
-1. 单条分析：
-
-```json
-{
-    "comment": "评论内容"
-}
-```
-
-2. 批量分析：
+1. dataToPy.json ：
 
 ```json
 {
+    "status": 'new | old',
+    "type": 'single | multiple',
     "data": [
         "评论内容1",
         "评论内容2",
@@ -72,23 +66,12 @@ Python 程序放在 py 目录下，通过同目录下的 json 文件与前端传
 }
 ```
 
-Python 向前端传两种数据结构，一种对应单条分析，一种对应批量分析。数据结构如下：
-
-1. 单条分析：
+2. dataToNodeJs.json :
 
 ```json
 {
-    "theDimension": "评论角度",
-    "theAttitude": "评论态度",
-    "theTextFeatures": "文字特征",
-    "theReply": "自动回复"
-}
-```
-
-2. 多条分析：
-
-```json
-{
+    "status": 'new | old',
+    "type": 'single | multiple',
     "data": [
         {
             "commentText": "评论内容",
@@ -108,3 +91,4 @@ Python 向前端传两种数据结构，一种对应单条分析，一种对应�
 }
 ```
 
+JavaScript 和 Python 通过轮询检查 status，获得输入。

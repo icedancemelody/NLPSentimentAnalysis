@@ -2,8 +2,9 @@ import React, { useState } from "react"
 const { ipcRenderer } = window.require('electron')
 
 export default function useSingleAnalyses() {
-    const [dimension, setDimension] = useState('等待输入评论')
+    const [commentText, setCommentText] = useState('等待输入评论')
     const [attitude, setAttitude] = useState('等待输入评论')
+    const [dimension, setDimension] = useState('等待输入评论')
     const [reply, setReply] = useState('等待输入评论')
     const [textFeatures, setTextFeatures] = useState('等待输入评论')
 
@@ -11,16 +12,17 @@ export default function useSingleAnalyses() {
 
     const analyze = () => {
         textAreaRef.current?.value
-            && ipcRenderer.send('singleAnalyses', JSON.stringify({ comment: textAreaRef.current?.value }))
+            && ipcRenderer.send('singleAnalyses', textAreaRef.current?.value)
     }
 
     ipcRenderer.removeAllListeners('singleAnalysesCompleted')
     ipcRenderer.on('singleAnalysesCompleted', (event: Event, dataString: string) => {
         const data = JSON.parse(dataString)
-        setDimension(data.theDimension)
-        setAttitude(data.theAttitude)
-        setTextFeatures(data.theTextFeatures)
-        setReply(data.theReply)
+        setCommentText(data.commentText)
+        setDimension(data.dimension)
+        setAttitude(data.attitude)
+        setTextFeatures(data.textFeatures)
+        setReply(data.reply)
     })
     ipcRenderer.removeAllListeners('singleAnalysesError')
     ipcRenderer.on('singleAnalysesError', (event: Event, ErrorString: string) => {
@@ -28,6 +30,7 @@ export default function useSingleAnalyses() {
     })
 
     return {
+        commentText,
         dimension,
         attitude,
         textFeatures,

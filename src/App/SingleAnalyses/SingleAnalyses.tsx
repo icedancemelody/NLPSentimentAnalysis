@@ -3,6 +3,7 @@ import useSingleAnalyses from './useSingleAnalyses'
 
 export default function SingleAnalyses() {
     const {
+        commentText,
         dimension,
         attitude,
         textFeatures,
@@ -31,10 +32,12 @@ export default function SingleAnalyses() {
             </article>
             <article className="output-area">
                 <h1>分析结果</h1>
-                <h2>评论角度</h2>
-                <p>{dimension}</p>
+                <h2>评论原文</h2>
+                <p>{commentText}</p>
                 <h2>评论态度</h2>
                 <p>{attitude}</p>
+                <h2>评论角度</h2>
+                <p>{dimension}</p>
                 <h2>文字特征</h2>
                 <p>{textFeatures}</p>
                 <h2>自动回复</h2>
