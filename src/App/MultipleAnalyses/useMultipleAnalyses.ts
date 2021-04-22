@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import drawPieCharts from './drawPieCharts'
 import dp from './dataProcesser'
 
-const { ipcRenderer } = window.require('electron')
+const ipcRenderer = window.require ? window.require('electron').ipcRenderer : undefined
 
 export interface multipleAnalysesReturnsElement {
     commentText: string,
@@ -13,13 +13,13 @@ export interface multipleAnalysesReturnsElement {
 }
 
 const useIpcRenderer = (setResults: React.Dispatch<React.SetStateAction<multipleAnalysesReturnsElement[]>>) => {
-    ipcRenderer.removeAllListeners('multipleAnalysesCompleted')
-    ipcRenderer.on('multipleAnalysesCompleted', (event: Event, dataString: string) => {
+    ipcRenderer?.removeAllListeners('multipleAnalysesCompleted')
+    ipcRenderer?.on('multipleAnalysesCompleted', (event: Event, dataString: string) => {
         const data = JSON.parse(dataString)
         setResults(data)
     })
-    ipcRenderer.removeAllListeners('multipleAnalysesError')
-    ipcRenderer.on('multipleAnalysesError', (event: Event, ErrorString: string) => {
+    ipcRenderer?.removeAllListeners('multipleAnalysesError')
+    ipcRenderer?.on('multipleAnalysesError', (event: Event, ErrorString: string) => {
         alert(ErrorString)
     })
 }
@@ -44,7 +44,7 @@ export default function useMultipleAnalyses() {
 
     const analyze = () => {
         inputFileRef.current?.files?.length !== 0
-            && ipcRenderer.send('multipleAnalyses', inputData)
+            && ipcRenderer?.send('multipleAnalyses', inputData)
     }
 
     const inputFileOnChange = () => {

@@ -1,9 +1,9 @@
 import './TitleBar.css'
 
-const { ipcRenderer } = window.require('electron')
+const ipcRenderer = window.require ? window.require('electron').ipcRenderer : undefined
 
 const closeMainWindow = () => {
-    ipcRenderer.send('closeMainWindow')
+    ipcRenderer?.send('closeMainWindow')
 }
 
 export default function Nav() {
