@@ -1,67 +1,29 @@
-import React, { useState } from 'react'
 import './MultipleAnalyses.css'
-import { multipleAnalysesWithPy, multipleAnalysesWithPyReturns } from '../CalcWithPy'
-
-const introParagraphs = [
-    '该页面利用人工智能分析[某行业]产品的评论。',
-    '导入数据文件，点击开始分析按钮，将输出各条评论对应的评论角度、评论态度、文字特征、人工智能给出的自动回复，以及总体的统计数据。',
-    '数据文件要求为 JSON 文件，格式为：{ "data" : string[] } 。',
-    '评论角度分为[n]方面，分别是：string[]。',
-    '评论态度分为两种：正面和负面'
-]
-
-const defaultInputData: string[] = []
-const defaultResults: multipleAnalysesWithPyReturns[] = []
-
-const useSingleAnalyses = () => {
-    const [results, setResults] = useState(defaultResults)
-    const [inputData, setInputData] = useState(defaultInputData)
-
-    const inputFileRef = React.createRef<HTMLInputElement>()
-
-
-    const analyze = () => setResults(multipleAnalysesWithPy(inputData))
-
-    const inputFileOnChange = () => {
-        console.log(inputFileRef.current?.files)
-        const fileReader = new FileReader()
-        fileReader.onload = (e) => {
-            if (e.target?.result) {
-                setInputData(JSON.parse(e.target?.result.toString()).data)
-                console.log(JSON.parse(e.target?.result.toString()).data)
-
-            }
-            console.log(e.target?.result)
-        }
-        if (inputFileRef.current?.files && inputFileRef.current?.files.length > 0) {
-            fileReader.readAsText(inputFileRef.current?.files[0])
-        }
-    }
-
-    return {
-        results,
-        inputFileRef,
-        analyze,
-        inputFileOnChange
-    }
-}
+import useMultipleAnalyses from './useMultipleAnalyses'
 
 export default function MultipleAnalyses() {
     const {
         results,
         inputFileRef,
+        dimensionPieChartRef,
+        attitudePieChartRef,
         analyze,
         inputFileOnChange
-    } = useSingleAnalyses()
+    } = useMultipleAnalyses()
 
     return (
         <main id="multiple-analyses" key="多条分析">
-
             <article className="introduction">
                 <h1>使用说明</h1>
                 {
-                    introParagraphs.map((item, index) =>
-                        <p key={index}>{item}</p>
+                    [
+                        '该页面利用人工智能分析[某行业]产品的评论。需要 Python 环境。',
+                        '导入数据文件，点击开始分析按钮，将输出各条评论对应的评论角度、评论态度、文字特征、人工智能给出的自动回复，以及总体的统计数据。',
+                        '数据文件要求为 JSON 文件，格式为：{ "data" : string[] } 。',
+                        '评论角度分为[n]方面，分别是：string[]。',
+                        '评论态度分为两种：正面和负面'
+                    ].map((item, index) =>
+                        (<p key={index}>{item}</p>)
                     )
                 }
             </article>
@@ -76,15 +38,32 @@ export default function MultipleAnalyses() {
                 <h1>统计结果</h1>
                 <section>
                     <h2>各角度评论占比</h2>
-                    <p>[此处放置饼图]</p>
+                    <p style={{ display: results.length === 0 ? 'inline' : 'none' }}>
+                        {'等待导入数据'}
+                    </p>
+                    <div
+                        id="dimensionPieChart"
+                        ref={dimensionPieChartRef}
+                        style={{ display: results.length === 0 ? 'none' : 'block' }}>
+                    </div>
                 </section>
                 <section>
                     <h2>各态度评论占比</h2>
-                    <p>[此处放置饼图]</p>
+                    <p style={{ display: results.length === 0 ? 'inline' : 'none' }}>
+                        {'等待导入数据'}
+                    </p>
+                    <div
+                        id="attitudePieChart"
+                        ref={attitudePieChartRef}
+                        style={{ display: results.length === 0 ? 'none' : 'block' }}>
+                    </div>
                 </section>
             </article>
             <article className="results-area">
                 <h1>各条评论分析结果</h1>
+                <p style={{ display: results.length === 0 ? 'inline' : 'none' }}>
+                    {'等待导入数据'}
+                </p>
                 {
                     results.map((result, index) => (
                         <article className="result-item" key={index}>

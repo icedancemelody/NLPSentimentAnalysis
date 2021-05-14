@@ -1,5 +1,26 @@
 .App {
   display: flex;
   flex-direction: column;
-  min-width: 720px;
+}
+
+.tab-shaper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* border-radius: 12px 12px 10px 10px; */
+  overflow: hidden;
+  background-color: #f7f7f7;
+}
+
+.tab-container {
+  position: absolute;
+  top: 92px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 0 0 24px 0;
+  overflow: auto;
+  z-index: 0;
 }

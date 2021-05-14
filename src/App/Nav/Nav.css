@@ -1,26 +1,60 @@
 nav {
+    position: fixed;
+    top: 12px;
+    left: 0;
+    right: 0;
+    z-index: 100;
     display: flex;
-    padding: 12px 0;
     justify-content: center;
-    align-items: center;
+    padding: 12px 0;
+    background-color: #f7f7f7;
+    user-select: none;
 }
 
 nav>ul {
+    grid-column: 1/2;
+    grid-row: 2/3;
     display: flex;
     padding: 4px;
     background-color: #efefef;
     border-radius: 8px;
     box-shadow: inset 0 0 4px 0 rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+nav>ul::before {
+    content: "";
+    position: absolute;
+    width: 160px;
+    height: 30px;
+    border-radius: 4px;
+    background-color: #fff;
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2), inset 0 0 8px 0 rgba(0, 0, 0, 0.05);
+    transition: margin-left ease 250ms;
+}
+
+nav>ul[data-selected-index="1"]::before {
+    margin-left: 0;
+}
+
+nav>ul[data-selected-index="2"]::before {
+    margin-left: 160px;
 }
 
 nav>ul>li {
     display: flex;
-    padding: 4px 24px;
+    z-index: 1;
+    width: 160px;
+    height: 30px;
     justify-content: center;
     align-items: center;
     border-radius: 4px;
+    cursor: pointer;
 }
-nav>ul>li.selected{
-    background-color: #fff;
-    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2), inset 0 0 8px 0 rgba(0,0,0,0.05);
+
+nav>.exitButton {
+    position: fixed;
+    z-index: 10000;
+    top: 0;
+    right: 60px;
 }
