@@ -12,8 +12,7 @@ export default function useSingleAnalyses() {
 
     async function analyze() {
         if (!(textAreaRef.current?.value)) return
-        const dataString = await fetchResult(textAreaRef.current?.value || '')
-        const data = JSON.parse(dataString)
+        const data = await fetchResult(textAreaRef.current?.value || '')
         setCommentText(data[0].commentText)
         setDimension(data[0].dimension)
         setAttitude(data[0].attitude)

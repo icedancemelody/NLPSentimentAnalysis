@@ -21,21 +21,21 @@ export default function useMultipleAnalyses() {
     }, [results, dimensionPieChartRef, attitudePieChartRef])
 
     async function analyze() {
-        if (!(inputFileRef.current?.files?.length === 0)) return
-        const dataString = await fetchResult(inputData)
-        const data = JSON.parse(dataString)
+        if (inputFileRef.current?.files?.length === 0) return
+        const data = await fetchResult(inputData)
         setResults(data)
     }
 
-    const inputFileOnChange = () => {
+    function inputFileOnChange() {
+        if (!(inputFileRef.current?.files)) return
+        if (!(inputFileRef.current?.files.length > 0)) return
+
         const fileReader = new FileReader()
         fileReader.onload = (e) => {
-            e.target?.result
-                && setInputData(e.target?.result.toString())
+            if (!(e.target?.result)) return
+            setInputData(e.target.result.toString())
         }
-        inputFileRef.current?.files
-            && inputFileRef.current?.files.length > 0
-            && fileReader.readAsText(inputFileRef.current?.files[0])
+        fileReader.readAsText(inputFileRef.current?.files[0])
     }
 
     return {
