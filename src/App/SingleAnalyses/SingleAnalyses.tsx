@@ -4,9 +4,7 @@ import useSingleAnalyses from './useSingleAnalyses'
 export default function SingleAnalyses() {
     const {
         commentText,
-        dimension,
         attitude,
-        textFeatures,
         reply,
         textAreaRef,
         analyze
@@ -36,10 +34,6 @@ export default function SingleAnalyses() {
                 <p>{commentText}</p>
                 <h2>评论态度</h2>
                 <p>{attitude}</p>
-                <h2>评论角度</h2>
-                <p>{dimension}</p>
-                <h2>文字特征</h2>
-                <p>{textFeatures}</p>
                 <h2>自动回复</h2>
                 <p>{reply}</p>
             </article>
