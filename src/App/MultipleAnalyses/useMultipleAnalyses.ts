@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import drawPieCharts from './drawPieCharts'
 import dp from './dataProcesser'
 import { multipleAnalysesReturnsElement } from '../../types'
-import { fetchResult } from '../../APIs'
+import { fetchResults } from '../../APIs'
 
 const defaultInputData: string = ''
 const defaultResults: multipleAnalysesReturnsElement[] = []
@@ -21,9 +21,13 @@ export default function useMultipleAnalyses() {
     }, [results, dimensionPieChartRef, attitudePieChartRef])
 
     async function analyze() {
+        setResults(() => [])
         if (inputFileRef.current?.files?.length === 0) return
-        const data = await fetchResult(inputData)
-        setResults(data)
+        const comments = JSON.parse(inputData).data as string[]
+        for (let i in comments) {
+            let newResult = await fetchResults([comments[i]])
+            setResults(old => [...old, newResult[0]])
+        }
     }
 
     function inputFileOnChange() {

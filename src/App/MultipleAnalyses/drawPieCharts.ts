@@ -6,9 +6,13 @@ export default function drawPieCharts(Element: HTMLDivElement | null, data: { va
     const myChart = echarts.init(Element)
     myChart.setOption({
         tooltip: { trigger: 'item' },
+        legend: {
+            top: '12px',
+            left: 'center'
+        },
         series: [{
             type: 'pie',
-            radius: ['20%', '50%'],
+            radius: ['24px', '60px'],
             avoidLabelOverlap: false,
             itemStyle: {
                 borderRadius: 4,
@@ -16,11 +20,11 @@ export default function drawPieCharts(Element: HTMLDivElement | null, data: { va
                 borderWidth: 2
             },
             label: {
-                show: true,
+                show: false,
                 position: 'outside'
             },
             labelLine: {
-                show: true
+                show: false
             },
             data
         }]

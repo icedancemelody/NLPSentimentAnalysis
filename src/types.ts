@@ -1,7 +1,9 @@
 export interface multipleAnalysesReturnsElement {
     commentText: string,
-    dimension: string,
     attitude: string,
-    textFeatures: string,
+    textFeatures: {
+        words: [string, string][],
+        wordIndexs: [number, number][]
+    },
     reply: string
 }

@@ -10,7 +10,6 @@ export default function MultipleAnalyses() {
         analyze,
         inputFileOnChange
     } = useMultipleAnalyses()
-
     return (
         <main id="multiple-analyses" key="多条分析">
             <article className="introduction">
@@ -68,13 +67,20 @@ export default function MultipleAnalyses() {
                     results.map((result, index) => (
                         <article className="result-item" key={index}>
                             <h2 className="result-item-commentText">评论原文</h2>
-                            <p>{result.commentText}</p>
-                            <h2 className="result-item-dimension">评论角度</h2>
-                            <p>{result.dimension}</p>
+                            <p>
+                                {
+                                    result.commentText.split('').map((word, idx) => {
+                                        for (let i in result.textFeatures.wordIndexs) {
+                                            if (idx + 1 === result.textFeatures.wordIndexs[i][1]) {
+                                                return `${word} ← [${result.textFeatures.words[i][1]}]`
+                                            }
+                                        }
+                                        return word
+                                    }).join('')
+                                }
+                            </p>
                             <h2 className="result-item-attitude">评论态度</h2>
                             <p>{result.attitude}</p>
-                            <h2 className="result-item-textFeatures">文字特征</h2>
-                            <p>{result.textFeatures}</p>
                             <h2 className="result-item-reply">自动回复</h2>
                             <p>{result.reply}</p>
                         </article>
