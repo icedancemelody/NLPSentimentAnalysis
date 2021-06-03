@@ -1,3 +1,4 @@
+import getFormatComment from '../getFormatComment'
 import './SingleAnalyses.css'
 import useSingleAnalyses from './useSingleAnalyses'
 
@@ -32,18 +33,7 @@ export default function SingleAnalyses() {
             <article className="output-area">
                 <h1>分析结果</h1>
                 <h2>评论原文</h2>
-                <p>
-                    {
-                        commentText.split('').map((word, idx) => {
-                            for (let i in textFeatures.wordIndexs) {
-                                if (idx + 1 === textFeatures.wordIndexs[i][1]) {
-                                    return `${word} ← [${textFeatures.words[i][1]}]`
-                                }
-                            }
-                            return word
-                        }).join('')
-                    }
-                </p>
+                <p>{getFormatComment(commentText, textFeatures)}</p>
                 <h2>评论态度</h2>
                 <p>{attitude}</p>
                 <h2>自动回复</h2>

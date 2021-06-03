@@ -1,5 +1,6 @@
 import './MultipleAnalyses.css'
 import useMultipleAnalyses from './useMultipleAnalyses'
+import getFormatComment from '../getFormatComment'
 
 export default function MultipleAnalyses() {
     const {
@@ -69,14 +70,7 @@ export default function MultipleAnalyses() {
                             <h2 className="result-item-commentText">评论原文</h2>
                             <p>
                                 {
-                                    result.commentText.split('').map((word, idx) => {
-                                        for (let i in result.textFeatures.wordIndexs) {
-                                            if (idx + 1 === result.textFeatures.wordIndexs[i][1]) {
-                                                return `${word} ← [${result.textFeatures.words[i][1]}]`
-                                            }
-                                        }
-                                        return word
-                                    }).join('')
+                                    getFormatComment(result.commentText, result.textFeatures)
                                 }
                             </p>
                             <h2 className="result-item-attitude">评论态度</h2>

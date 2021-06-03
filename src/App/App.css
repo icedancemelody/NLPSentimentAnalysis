@@ -24,3 +24,115 @@
   overflow: auto;
   z-index: 0;
 }
+
+.dms-span {
+  font-weight: bold;
+}
+
+.dms-span::after {
+  font-size: 8px;
+  font-weight: normal;
+  margin: 0 2px;
+}
+
+/* 外观 屏幕 充电 音效 拍照 运行 手感 */
+
+/* E53935 D81B60 8E24AA 3949AB 0097A7 388E3C 795548 */
+
+/* 外观 */
+
+span.S-waiguan, span.A-waiguan {
+  color: #E53935;
+}
+
+span.S-waiguan::after {
+  content: '(主体-外观)';
+}
+
+span.A-waiguan::after {
+  content: '(形容词-外观)';
+}
+
+/* 屏幕 */
+
+span.S-pingmu, span.A-pingmu {
+  color: #D81B60;
+}
+
+span.S-pingmu::after {
+  content: '(主体-屏幕)';
+}
+
+span.A-pingmu::after {
+  content: '(形容词-屏幕)';
+}
+
+/* 充电 */
+
+span.S-chongdian, span.A-chongdian {
+  color: #8E24AA;
+}
+
+span.S-chongdian::after {
+  content: '(主体-充电)';
+}
+
+span.A-chongdian::after {
+  content: '(形容词-充电)';
+}
+
+/* 音效 */
+
+span.S-yinxiao, span.A-yinxiao {
+  color: #3949AB;
+}
+
+span.S-yinxiao::after {
+  content: '(主体-音效)';
+}
+
+span.A-yinxiao::after {
+  content: '(形容词-音效)';
+}
+
+/* 拍照 */
+
+span.S-paizhao, span.A-paizhao {
+  color: #0097A7;
+}
+
+span.S-paizhao::after {
+  content: '(主体-拍照)';
+}
+
+span.A-paizhao::after {
+  content: '(形容词-拍照)';
+}
+
+/* 运行 */
+
+span.S-yunxing, span.A-yunxing {
+  color: #388E3C;
+}
+
+span.S-yunxing::after {
+  content: '(主体-运行)';
+}
+
+span.A-yunxing::after {
+  content: '(形容词-运行)';
+}
+
+/* 手感 */
+
+span.S-shougan, span.A-shougan {
+  color: #795548;
+}
+
+span.S-shougan::after {
+  content: '(主体-手感)';
+}
+
+span.A-shougan::after {
+  content: '(形容词-手感)';
+}

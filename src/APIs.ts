@@ -1,5 +1,5 @@
 import { multipleAnalysesReturnsElement } from './types'
-const baseURL = 'http://localhost:3001'
+const baseURL = 'http://47.102.203.5'
 
 export async function fetchResults(comments: string[]) {
     const response = await fetch(`${baseURL}/analyze`, {
