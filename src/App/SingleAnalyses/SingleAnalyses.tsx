@@ -6,7 +6,6 @@ export default function SingleAnalyses() {
     const {
         commentText,
         attitude,
-        reply,
         textFeatures,
         textAreaRef,
         analyze
@@ -36,8 +35,6 @@ export default function SingleAnalyses() {
                 <p>{getFormatComment(commentText, textFeatures)}</p>
                 <h2>评论态度</h2>
                 <p>{attitude}</p>
-                <h2>自动回复</h2>
-                <p>{reply}</p>
             </article>
         </main>
     )

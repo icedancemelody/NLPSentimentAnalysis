@@ -76,8 +76,6 @@ export default function MultipleAnalyses() {
                             </p>
                             <h2 className="result-item-attitude">评论态度</h2>
                             <p>{result.attitude}</p>
-                            <h2 className="result-item-reply">自动回复</h2>
-                            <p>{result.reply}</p>
                         </article>
                     ))
                 }
