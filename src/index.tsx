@@ -1,3 +1,5 @@
+// 该文件为程序入口
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'

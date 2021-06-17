@@ -1,3 +1,4 @@
+// 该文件为单条分析页面的业务逻辑部分
 import React, { useState } from "react"
 import { fetchResults } from '../../APIs'
 

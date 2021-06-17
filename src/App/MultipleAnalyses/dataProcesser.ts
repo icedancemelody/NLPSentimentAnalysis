@@ -1,3 +1,4 @@
+// 该文件为为绘制饼图做的数据预处理逻辑
 import { multipleAnalysesReturnsElement } from '../../types'
 
 function getDataForDimensionPie(results: multipleAnalysesReturnsElement[]) {

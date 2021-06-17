@@ -1,4 +1,6 @@
+// 该文件用于定义应用所需网络请求接口
 import { multipleAnalysesReturnsElement } from './types'
+
 const baseURL = 'http://47.102.203.5'
 
 export async function fetchResults(comments: string[]) {

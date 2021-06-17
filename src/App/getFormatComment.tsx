@@ -1,3 +1,5 @@
+// 该文件导出一个函数，将评论按照语言特征进行标注，返回含有标注的 JSX Element
+
 export default function getFormatComment(commentText: string, textFeatures: {
     words: [string, string][],
     wordIndexs: [number, number][]

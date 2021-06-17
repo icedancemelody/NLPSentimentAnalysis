@@ -1,3 +1,4 @@
+// 该文件为绘制饼图的逻辑部分
 import * as echarts from 'echarts'
 export default function drawPieCharts(Element: HTMLDivElement | null, data: { value: number, name: string }[]) {
     if (Element === null || data.length === 0) {

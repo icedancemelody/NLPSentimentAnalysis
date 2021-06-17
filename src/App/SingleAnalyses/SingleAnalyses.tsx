@@ -1,3 +1,4 @@
+// 该文件为单条分析页面的视图部分
 import getFormatComment from '../getFormatComment'
 import './SingleAnalyses.css'
 import useSingleAnalyses from './useSingleAnalyses'

@@ -1,3 +1,4 @@
+// 该文件用于数据类型定义
 export interface multipleAnalysesReturnsElement {
     commentText: string,
     attitude: string,

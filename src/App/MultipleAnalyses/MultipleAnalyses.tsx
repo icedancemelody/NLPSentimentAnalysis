@@ -1,3 +1,4 @@
+// 该文件为批量分析的视图部分
 import './MultipleAnalyses.css'
 import useMultipleAnalyses from './useMultipleAnalyses'
 import getFormatComment from '../getFormatComment'

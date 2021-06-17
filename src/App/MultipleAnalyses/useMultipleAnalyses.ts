@@ -1,3 +1,4 @@
+// 该文件为批量分析页面的业务逻辑部分
 import React, { useState, useEffect } from 'react'
 import drawPieCharts from './drawPieCharts'
 import dp from './dataProcesser'

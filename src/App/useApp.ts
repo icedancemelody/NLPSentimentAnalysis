@@ -1,3 +1,4 @@
+// 该文件为应用顶层逻辑部分
 import { useState } from 'react';
 import SingleAnalyses from './SingleAnalyses/SingleAnalyses'
 import MultipleAnalyses from './MultipleAnalyses/MultipleAnalyses'

@@ -1,3 +1,4 @@
+// 该文件构建应用为一个组件
 import './App.css'
 import Nav from './Nav/Nav'
 import useApp from './useApp'
